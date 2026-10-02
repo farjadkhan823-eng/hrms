@@ -15,8 +15,7 @@
 - Salary: absent 1000, late 500, off with leaveNotGiven 1000, first 2 leaves free, 500 per extra leave.
 - Working days (Mon-Sat) with no attendance record are counted absent when salary is generated.
 
-## Postman tests
-Login first, copy `token`, and send it as `Authorization: Bearer <token>` on every other request.
+## API flows
 
 | API | Body / Notes |
 |---|---|
