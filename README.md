@@ -1,27 +1,5 @@
 # HRMS (Angular 20 + Node/Express + PostgreSQL + Prisma)
 
-## Requirements
-Node.js 20+, PostgreSQL, npm.
-
-## 1. Backend
-```bash
-cd backend
-npm install
-cp .env.example .env          # then put your PostgreSQL password in DATABASE_URL
-```
-PostgreSQL mein database banayein: `CREATE DATABASE hrms_db;`
-```bash
-npx prisma migrate dev --name init
-npm run seed                  # creates admin + 2 demo employees
-npm run dev                   # http://localhost:5000
-```
-
-## 2. Frontend
-```bash
-cd frontend
-npm install
-npm start                     # http://localhost:4200
-```
 
 ## Demo logins
 | Role | Email | Password |
