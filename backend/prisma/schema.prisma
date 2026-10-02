@@ -1,0 +1,86 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  admin
+  employee
+}
+
+// used for Employee.isActive and Attendance.status
+enum ActiveStatus {
+  active
+  inactive
+}
+
+enum Punctuality {
+  late
+  onTime
+  off
+  early
+  present
+  absent
+}
+
+enum OffReason {
+  onDuty
+  onLeave
+  leaveNotGiven
+  sickLeave
+  casualLeave
+}
+
+model Employee {
+  id          Int          @id @default(autoincrement())
+  name        String
+  email       String       @unique
+  password    String       // always hashed
+  role        Role         @default(employee)
+  department  String
+  salary      Float        @default(30000)
+  joiningDate DateTime     @default(now())
+  isActive    ActiveStatus @default(active)
+
+  attendances Attendance[]
+  salaries    Salary[]
+}
+
+model Attendance {
+  id          Int          @id @default(autoincrement())
+  employeeId  Int
+  date        DateTime     @db.Date
+  checkIn     DateTime?
+  checkOut    DateTime?
+  status      ActiveStatus @default(active)
+  punctuality Punctuality
+  offReason   OffReason?
+
+  employee    Employee     @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  // one record per employee per day
+  @@unique([employeeId, date])
+}
+
+model Salary {
+  id              Int      @id @default(autoincrement())
+  employeeId      Int
+  month           Int
+  year            Int
+  baseSalary      Float
+  totalDeductions Float    @default(0)
+  lateDeduction   Float    @default(0)
+  absentDeduction Float    @default(0)
+  leaveDeduction  Float    @default(0)
+  netSalary       Float
+  details         Json?
+
+  employee        Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  // one salary per employee per month
+  @@unique([employeeId, month, year])
+}
